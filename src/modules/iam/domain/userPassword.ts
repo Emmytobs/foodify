@@ -24,17 +24,30 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
         );
     }
     public isHashed(): boolean {
-        return this.props.hashed
+        return !!this.props.hashed
     }
     public async getHashedValue() {
         if (this.isHashed()) 
             return this.props.value;
         return this.hashPassword(this.props.value);
     }
+
+    public async comparePassword(plainTextPassword: string, savedPassword: string): Promise<boolean> {
+        return this.bcryptCompare(plainTextPassword, savedPassword)
+        // if (this.isHashed) {
+        //     const hashed = this.props.value
+        //     return this.bcryptCompare(plainTextPassword, hashed)
+        // }
+        // return this.props.value === plainTextPassword;
+    }
     
     private static isAppropriateLength(password: string): boolean {
         const isOfMinimumLength = password.length >= this.minimumLength;
         return !!isOfMinimumLength;
+    }
+    
+    private bcryptCompare(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+        return bcrypt.compare(plainTextPassword, hashedPassword)
     }
 
     private async hashPassword(password: string) {

@@ -1,6 +1,8 @@
+// @ts-nocheck
 import express from 'express';
+import { iamRoutes } from '../../../../modules/iam/infra/http/routes/iam.route';
 
-export const v1Router = express.Router();
+const v1Router = express.Router();
 
 v1Router.get('/', (req, res) => {
     res.status(200).json({
@@ -11,3 +13,7 @@ v1Router.get('/', (req, res) => {
         }
     })
 })
+
+v1Router.use('/user', iamRoutes)
+
+export { v1Router };

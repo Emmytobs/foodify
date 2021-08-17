@@ -2,8 +2,9 @@ import { AggregateRoot } from "../AggregateRoot";
 import { IDomainEvent } from "./IDomainEvent";
 import UniqueEntityID from "../UniqueEntityID";
 
+export type RegisterCallback = (event: IDomainEvent) => Promise<void> | void
 export class DomainEvent {
-    private static handlersMap = {}
+    private static handlersMap: Record<string, any> = {}
     private static markedAggregates: AggregateRoot<any>[] = []
 
     /**
@@ -17,7 +18,7 @@ export class DomainEvent {
         const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
 
         if (!aggregateFound) {
-        this.markedAggregates.push(aggregate);
+            this.markedAggregates.push(aggregate);
         }
     }
 
@@ -30,12 +31,12 @@ export class DomainEvent {
         this.markedAggregates.splice(index, 1);
     }
 
-    private static findMarkedAggregateByID (id: UniqueEntityID): AggregateRoot<any> {
-        let found: AggregateRoot<any> = null;
+    private static findMarkedAggregateByID (id: UniqueEntityID): AggregateRoot<any> | null {
+        let found: AggregateRoot<any> | null = null;
         for (let aggregate of this.markedAggregates) {
-        if (aggregate.id.equals(id)) {
-            found = aggregate;
-        }
+            if (aggregate.id.equals(id)) {
+                found = aggregate;
+            }
         }
 
         return found;
@@ -51,7 +52,7 @@ export class DomainEvent {
         }
     }
 
-    public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
+    public static register(callback: RegisterCallback, eventClassName: string): void {
         if (!this.handlersMap.hasOwnProperty(eventClassName)) {
         this.handlersMap[eventClassName] = [];
         }

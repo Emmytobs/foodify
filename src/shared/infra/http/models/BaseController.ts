@@ -1,43 +1,79 @@
+import { Response, Request } from 'express'
+
+type ResponseData = Record<any, any> | any[]
+
+type ResponseShape = {
+    status: 'error' | 'success',
+    data?: ResponseData, // Allows for an object or array
+    message?: string
+}
 abstract class BaseController {
-    execute(req, res) {
+    execute(req: Request, res: Response) {
         this.executeImpl(req, res)
     }
-    abstract executeImpl(req, res)
+    abstract executeImpl(req: Request, res: Response): Promise<any> | any
 
     jsonResponse(
-        res,
-        status,
-        data?
+        res: Response,
+        status: number,
+        data?: ResponseShape
     ) {
         return res.status(status).json(data)
     }
 
-    ok(res, message, data?) {
-        this.jsonResponse(res, 200, data);
+    ok<T = any>(res: Response, data?: T, message?: string) {
+        this.jsonResponse(res, 200, <ResponseShape>{
+            status: 'success',
+            data,
+            message
+        });
     }
 
-    created(res, message, data?) {
-        this.jsonResponse(res, 201, data);
+    created(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 201, <ResponseShape>{
+            status: 'success',
+            data,
+            message
+        });
     }
 
-    clientError(res, message, data?) {
-        this.jsonResponse(res, 401, data);
+    clientError(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 401, <ResponseShape>{
+            status: 'error',
+            data,
+            message
+        });
     }
     
-    notFound(res, message, data?) {
-        this.jsonResponse(res, 404, data);
+    notFound(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 404, <ResponseShape>{
+            status: 'error',
+            data,
+            message
+        });
     }
     
-    unauthorized(res, message, data?) {
-        this.jsonResponse(res, 401, data);
+    unauthorized(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 401, <ResponseShape>{
+            status: 'error',
+            data,
+            message
+        });
     }
     
-    forbidden(res, message, data?) {
-        this.jsonResponse(res, 403, data);
+    forbidden(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 403, <ResponseShape>{
+            status: 'error',
+            data,
+            message
+        });
     }
     
-    fail(res, message) {
-        this.jsonResponse(res, 500);
+    fail(res: Response, message?: string) {
+        this.jsonResponse(res, 500, <ResponseShape>{
+            status: 'error',
+            message: message || 'Unexpected error'
+        });
     }
 }
 

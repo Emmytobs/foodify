@@ -8,7 +8,6 @@ interface UserNameProps {
 }
 
 export class UserName extends Entity<UserNameProps> {
-    private static MIN_CHARACTERS_IN_USERNAME = 3;
     private constructor(props: UserNameProps, id?: UniqueEntityID) {
         super(props, id);
     }
@@ -20,7 +19,7 @@ export class UserName extends Entity<UserNameProps> {
     public static create(props: UserNameProps): Result<UserName> {
         const guardResult = Guard.againstNullOrUndefined(props.value, 'username');
         if (!guardResult.succeeded) {
-            return Result.fail<UserName>(undefined);
+            return Result.fail<UserName>(guardResult.message || '');
         }
 
         const hasMinimumChars = Guard.againstAtLeast(this.MIN_CHARACTERS_IN_USERNAME, props.value);
@@ -32,4 +31,6 @@ export class UserName extends Entity<UserNameProps> {
             { value: props.value }
         ));
     }
+
+    private static MIN_CHARACTERS_IN_USERNAME = 3;
 }

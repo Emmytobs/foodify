@@ -1,9 +1,11 @@
+// @ts-nocheck
 import { Models } from 'sequelize';
 
 import { User } from '../../domain/user';
 import { UserEmail } from '../../domain/userEmail';
+import { UserId } from '../../domain/userId';
 import { UserMap } from '../../mappers/userMap';
-import { IUserRepo } from '../UserRepo';
+import { IUserRepo } from '../userRepo';
 
 export default class SequelizeUserRepo implements IUserRepo {
 
@@ -14,10 +16,12 @@ export default class SequelizeUserRepo implements IUserRepo {
         // Perform operation on persistence technology
     }
 
-    async exists(userEmail: UserEmail) {
+    async exists(userEmail: UserEmail | string) {
         const userWithEmailInDB = await this.models.UserModel.findOne({
             where: {
-                email: userEmail.value
+                email: userEmail instanceof UserEmail ?
+                    userEmail.value : 
+                    userEmail
             }
         });
         return !!userWithEmailInDB
@@ -32,6 +36,20 @@ export default class SequelizeUserRepo implements IUserRepo {
         return UserMap.toDomain(rawUser);
     }
 
+    async getUserByEmail(email: string): Promise<User> {
+        const rawUser = await this.models.UserModel.findOne({
+            where: { email }
+        });
+        return UserMap.toDomain(rawUser);
+    }
+
+    async getUserByUserId(userId: string): Promise<User> {
+        const rawUser = await this.models.UserModel.findOne({
+            where: { userId }
+        });
+        return UserMap.toDomain(rawUser);
+    }
+
     async save(user: User) {
         const rawUser = await UserMap.toPersistence(user);
         const userExists = await this.exists(user.email)
@@ -40,6 +58,12 @@ export default class SequelizeUserRepo implements IUserRepo {
             return;
         }
         await this.models.UserModel.create(rawUser);
+    }
+
+    async delete(userId: UserId) {
+        await this.models.UserModel.remove({
+            where: { userId }
+        })
     }
 }
 

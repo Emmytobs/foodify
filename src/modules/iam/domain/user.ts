@@ -35,6 +35,31 @@ export class User extends AggregateRoot<UserProps> {
     get createdAt() { return this.props.createdAt }
     get updatedAt() { return this.props.updatedAt }
 
+    updateFirstname(firstname: string) {
+        this.props.firstname = firstname;
+        return Result.ok();
+    }
+    updateLastname(lastname: string) {
+        this.props.lastname = lastname;
+        return Result.ok();
+    }
+    updatePassword(password: string) {
+        const passwordOrError = UserPassword.create({ value: password, hashed: false });
+        if (passwordOrError.isFailure) {
+            return Result.fail<UserPassword>(passwordOrError.errorValue().toString());
+        }
+        this.props.password = passwordOrError.getValue();
+        return Result.ok<UserPassword>();
+    }
+    updateUsername(username: string) {
+        const usernameOrError = UserName.create({ value: username });
+        if (usernameOrError.isFailure) {
+            return Result.fail<UserName>(usernameOrError.errorValue().toString());
+        }
+        this.props.username = usernameOrError.getValue();
+        return Result.ok<UserName>();
+    }
+
     private constructor(props: UserProps, id?: UniqueEntityID) {
         super(props, id);
     }
@@ -47,7 +72,7 @@ export class User extends AggregateRoot<UserProps> {
         ])
             // if invalid send an error, else continue
         if (!guardResult.succeeded) {
-            return Result.fail<User>(guardResult.message);
+            return Result.fail<User>(guardResult.message || '');
         }
         //#Step 2 - If it's a new user, simply send a domain event. Else, return an instance of the user.
         const user = new User({

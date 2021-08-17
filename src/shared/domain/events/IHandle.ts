@@ -1,3 +1,3 @@
-export interface IHandle<T> {
+export interface IHandle {
     setupSubscription: () => void
 }

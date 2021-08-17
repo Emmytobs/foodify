@@ -22,9 +22,11 @@ export class AggregateRoot<A> extends Entity<A> {
         this._domainEvents.slice(0, this._domainEvents.length);
     }
 
-    private logDomainEventAdded(domainEvent: IDomainEvent) {
-        const thisClass = Reflect.getPrototypeOf(this);
-        const domainEventClass = Reflect.getPrototypeOf(domainEvent);
-        console.info(`[Domain Event Created]:`, thisClass.constructor.name, '==>', domainEventClass.constructor.name)
-    }
+    // private logDomainEventAdded(domainEvent: IDomainEvent) {
+    //     const thisClass = Reflect.getPrototypeOf(this);
+    //     const domainEventClass = Reflect.getPrototypeOf(domainEvent);
+    //     if (thisClass && domainEventClass) {
+    //         console.info(`[Domain Event Created]:`, thisClass.constructor.name, '==>', domainEventClass.constructor.name)
+    //     }
+    // }
 }

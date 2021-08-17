@@ -1,3 +1,4 @@
+import { UserModelAttr } from "../../../shared/infra/database/sequelize/models/UserModel";
 import { User } from "../domain/user";
 import { UserEmail } from "../domain/userEmail";
 import { UserName } from "../domain/userName";
@@ -10,7 +11,7 @@ export class UserMap {
 
     static toDomain(user: any): User {
         const emailOrError = UserEmail.create(user.email);
-        const passwordOrError = UserPassword.create(user.password);
+        const passwordOrError = UserPassword.create({value: user.password, hashed: true });
         const usernameOrError = UserName.create({ value: user.username })
 
         const userOrError = User.create({
@@ -22,13 +23,13 @@ export class UserMap {
         });
 
         if (userOrError.isFailure) {
-            console.log(userOrError.error);
-            return null;
+            // If it's a failed result, throw an error
+            throw new Error(userOrError.error?.toString())
         }
         return userOrError.getValue();
     }
 
-    static async toPersistence(user: User): Promise<any> {
+    static async toPersistence(user: User): Promise<UserModelAttr> {
         let password: any;
         if (user.password.isHashed()) {
             password = user.password.value
@@ -36,14 +37,17 @@ export class UserMap {
             password = await user.password.getHashedValue();
         }
 
+        
         return {
             userId: user.userId.id.toString(),
             firstname: user.firstname,
             lastname: user.lastname,
-            username: user.username.value,
+            username: user.username?.value,
             email: user.email.value,
             password,
-            is_email_verified: user.isEmailVerified
+            is_email_verified: user.isEmailVerified!,
+            roles: user.roles.value,
+            lastLogin: user.lastLogin!
         };
     }
 }

@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginUserController = void 0;
+var repo_1 = require("../../repo");
+var AuthService_1 = require("../../services/implementation/AuthService");
+var LoginUser_1 = require("./LoginUser");
+var LoginUserController_1 = require("./LoginUserController");
+var loginUserUseCase = new LoginUser_1.LoginUser(repo_1.userRepo, AuthService_1.authService);
+var loginUserController = new LoginUserController_1.LoginUserController(loginUserUseCase);
+exports.loginUserController = loginUserController;

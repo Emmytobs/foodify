@@ -1,22 +1,29 @@
+import { Result } from "../../../../shared/core/Result"
 import { UseCaseError } from "../../../../shared/core/UseCaseError"
 
-export class EmailAlreadyTakenError implements UseCaseError {
-    message: string
+export class EmailAlreadyTakenError extends Result<UseCaseError> {
     constructor() {
-        this.message = 'A user exists with that email'
+        super(
+            false, 
+            'A user exists with that email'
+        )
     }
 }
 
-export class UsernameAlreadyTakenError implements UseCaseError {
-    message: string
+export class UsernameAlreadyTakenError extends Result<UseCaseError> {
     constructor() {
-        this.message = 'Your username is already taken'
+        super(
+            false,
+            'Your username is already taken'
+        )
     }
 }
 
-export class UserPasswordInvalidError implements UseCaseError {
-    message: string
+export class UserPasswordInvalidError extends Result<UseCaseError> {
     constructor() {
-        this.message = 'Password supplied is invalid'
+        super(
+            false,
+            'Password or email is invalid'
+        )
     }
 }
