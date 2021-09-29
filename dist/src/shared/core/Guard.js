@@ -1,62 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Guard = void 0;
-var Guard = /** @class */ (function () {
-    function Guard() {
-    }
-    Guard.combine = function (guardResults) {
-        for (var _i = 0, guardResults_1 = guardResults; _i < guardResults_1.length; _i++) {
-            var result = guardResults_1[_i];
+class Guard {
+    static combine(guardResults) {
+        for (let result of guardResults) {
             if (result.succeeded === false)
                 return result;
         }
         return { succeeded: true };
-    };
-    Guard.greaterThan = function (minValue, actualValue) {
+    }
+    static greaterThan(minValue, actualValue) {
         return actualValue > minValue
             ? { succeeded: true }
             : {
                 succeeded: false,
-                message: "Number given {" + actualValue + "} is not greater than {" + minValue + "}"
+                message: `Number given {${actualValue}} is not greater than {${minValue}}`
             };
-    };
-    Guard.againstAtLeast = function (numChars, text) {
+    }
+    static againstAtLeast(numChars, text) {
         return text.length >= numChars
             ? { succeeded: true }
             : {
                 succeeded: false,
-                message: "Text is not at least " + numChars + " chars."
+                message: `Text is not at least ${numChars} chars.`
             };
-    };
-    Guard.againstAtMost = function (numChars, text) {
+    }
+    static againstAtMost(numChars, text) {
         return text.length <= numChars
             ? { succeeded: true }
             : {
                 succeeded: false,
-                message: "Text is greater than " + numChars + " chars."
+                message: `Text is greater than ${numChars} chars.`
             };
-    };
-    Guard.againstNullOrUndefined = function (argument, argumentName) {
+    }
+    static againstNullOrUndefined(argument, argumentName) {
         if (argument === null || argument === undefined) {
-            return { succeeded: false, message: argumentName + " is null or undefined" };
+            return { succeeded: false, message: `${argumentName} is null or undefined` };
         }
         else {
             return { succeeded: true };
         }
-    };
-    Guard.againstNullOrUndefinedBulk = function (args) {
-        for (var _i = 0, args_1 = args; _i < args_1.length; _i++) {
-            var arg = args_1[_i];
-            var result = this.againstNullOrUndefined(arg.argument, arg.argumentName);
+    }
+    static againstNullOrUndefinedBulk(args) {
+        for (let arg of args) {
+            const result = this.againstNullOrUndefined(arg.argument, arg.argumentName);
             if (!result.succeeded)
                 return result;
         }
         return { succeeded: true };
-    };
-    Guard.isOneOf = function (value, validValues, argumentName) {
-        var isValid = false;
-        for (var _i = 0, validValues_1 = validValues; _i < validValues_1.length; _i++) {
-            var validValue = validValues_1[_i];
+    }
+    static isOneOf(value, validValues, argumentName) {
+        let isValid = false;
+        for (let validValue of validValues) {
             if (value === validValue) {
                 isValid = true;
             }
@@ -67,14 +62,13 @@ var Guard = /** @class */ (function () {
         else {
             return {
                 succeeded: false,
-                message: argumentName + " isn't one of the correct types in " + JSON.stringify(validValues) + ". Got \"" + value + "\"."
+                message: `${argumentName} isn't one of the correct types in ${JSON.stringify(validValues)}. Got "${value}".`
             };
         }
-    };
-    Guard.areOneOf = function (validValues, args) {
-        for (var _i = 0, args_2 = args; _i < args_2.length; _i++) {
-            var arg = args_2[_i];
-            var result = this.isOneOf(arg.argument, validValues, arg.argumentName);
+    }
+    static areOneOf(validValues, args) {
+        for (const arg of args) {
+            const result = this.isOneOf(arg.argument, validValues, arg.argumentName);
             if (!result.succeeded) {
                 return result;
             }
@@ -83,7 +77,7 @@ var Guard = /** @class */ (function () {
         // if (!result.succeeded) {
         //   return result;
         // }
-    };
+    }
     // Verify if this method and the one after it are correctly implemented
     // public static isOneOfEnum (value: any, enumObject: any, argumentName: string): IGuardResult {
     //   const isValidValueInEnum = !!~Object.values(enumObject).some(enumValue => enumValue === value);
@@ -104,30 +98,28 @@ var Guard = /** @class */ (function () {
     //     return { succeeded: true };
     //   }
     // }
-    Guard.inRange = function (num, min, max, argumentName) {
-        var isInRange = num >= min && num <= max;
+    static inRange(num, min, max, argumentName) {
+        const isInRange = num >= min && num <= max;
         if (!isInRange) {
-            return { succeeded: false, message: argumentName + " is not within range " + min + " to " + max + "." };
+            return { succeeded: false, message: `${argumentName} is not within range ${min} to ${max}.` };
         }
         else {
             return { succeeded: true };
         }
-    };
-    Guard.allInRange = function (numbers, min, max, argumentName) {
-        var failingResult = null;
-        for (var _i = 0, numbers_1 = numbers; _i < numbers_1.length; _i++) {
-            var num = numbers_1[_i];
-            var numIsInRangeResult = this.inRange(num, min, max, argumentName);
+    }
+    static allInRange(numbers, min, max, argumentName) {
+        let failingResult = null;
+        for (let num of numbers) {
+            const numIsInRangeResult = this.inRange(num, min, max, argumentName);
             if (!numIsInRangeResult.succeeded)
                 failingResult = numIsInRangeResult;
         }
         if (failingResult) {
-            return { succeeded: false, message: argumentName + " is not within the range." };
+            return { succeeded: false, message: `${argumentName} is not within the range.` };
         }
         else {
             return { succeeded: true };
         }
-    };
-    return Guard;
-}());
+    }
+}
 exports.Guard = Guard;

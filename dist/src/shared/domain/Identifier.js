@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Identifier = /** @class */ (function () {
-    function Identifier(value) {
+class Identifier {
+    constructor(value) {
         this.value = value;
         this.value = value;
     }
-    Identifier.prototype.equals = function (id) {
+    equals(id) {
         if (id === null || id === undefined) {
             return false;
         }
@@ -13,16 +13,15 @@ var Identifier = /** @class */ (function () {
             return false;
         }
         return id.toValue() === this.value;
-    };
-    Identifier.prototype.toString = function () {
+    }
+    toString() {
         return String(this.value);
-    };
+    }
     /**
      * Return raw value of identifier
      */
-    Identifier.prototype.toValue = function () {
+    toValue() {
         return this.value;
-    };
-    return Identifier;
-}());
+    }
+}
 exports.default = Identifier;

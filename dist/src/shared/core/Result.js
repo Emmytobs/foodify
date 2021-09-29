@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.left = exports.right = exports.Left = exports.Right = exports.Result = void 0;
-var Result = /** @class */ (function () {
-    function Result(isSuccess, error, value) {
+class Result {
+    constructor(isSuccess, error, value) {
         if (isSuccess && error) {
             throw new Error('[InvalidOperation]: A result can not be success and failure');
         }
@@ -17,63 +17,59 @@ var Result = /** @class */ (function () {
         this.value = value;
         this.error = error;
     }
-    Result.prototype.getValue = function () {
+    getValue() {
         if (this.isFailure) {
             throw new Error('Can not get the value of a failed result');
         }
         return this.value;
-    };
-    Result.prototype.errorValue = function () {
+    }
+    errorValue() {
         return this.error;
-    };
-    Result.combine = function (results) {
-        for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
-            var result = results_1[_i];
+    }
+    static combine(results) {
+        for (const result of results) {
             if (result.isFailure)
                 return result;
         }
         return Result.ok();
-    };
-    Result.ok = function (value) {
+    }
+    static ok(value) {
         return new Result(true, undefined, value);
-    };
-    Result.fail = function (error) {
+    }
+    static fail(error) {
         return new Result(false, error);
-    };
-    return Result;
-}());
+    }
+}
 exports.Result = Result;
-var Right = /** @class */ (function () {
-    function Right(value) {
+class Right {
+    constructor(value) {
         this.value = value;
     }
-    Right.prototype.isRight = function () {
+    isRight() {
         return true;
-    };
-    Right.prototype.isLeft = function () {
+    }
+    isLeft() {
         return false;
-    };
-    return Right;
-}());
+    }
+}
 exports.Right = Right;
-var Left = /** @class */ (function () {
-    function Left(value) {
+class Left {
+    constructor(value) {
         this.value = value;
     }
-    Left.prototype.isRight = function () {
+    isRight() {
         return false;
-    };
-    Left.prototype.isLeft = function () {
+    }
+    isLeft() {
         return true;
-    };
-    return Left;
-}());
+    }
+}
 exports.Left = Left;
-var right = function (a) {
+const right = (a) => {
     return new Right(a);
 };
 exports.right = right;
-var left = function (b) {
+const left = (b) => {
     return new Left(b);
 };
 exports.left = left;

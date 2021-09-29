@@ -1,6 +1,7 @@
-import { Sequelize } from 'sequelize'
+import { Options, Sequelize } from 'sequelize'
 import dotenv from 'dotenv'
 
+// import * as DBconfig from '../config'
 import * as DBconfig from '../config'
 
 type NodeEnvs = 'development' | 'test' | 'production'
@@ -8,7 +9,7 @@ type NodeEnvs = 'development' | 'test' | 'production'
 dotenv.config()
 
 const env = process.env.NODE_ENV as NodeEnvs || 'development' 
-const config = DBconfig[env]
+const config: any = DBconfig[env]
 
 let sequelize: Sequelize
 

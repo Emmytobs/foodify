@@ -37,8 +37,16 @@ abstract class BaseController {
         });
     }
 
+    conflict(res: Response, data?: any, message?: string) {
+        this.jsonResponse(res, 409, <ResponseShape>{
+            status: 'error',
+            data,
+            message: message || 'Conflict'
+        });
+    }
+
     clientError(res: Response, data?: any, message?: string) {
-        this.jsonResponse(res, 401, <ResponseShape>{
+        this.jsonResponse(res, 400, <ResponseShape>{
             status: 'error',
             data,
             message

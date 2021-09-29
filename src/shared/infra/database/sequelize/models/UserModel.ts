@@ -1,5 +1,7 @@
 import { DataTypes, Optional, Model, Association } from 'sequelize';
 import { sequelize } from '.';
+import { ValidRoles } from '../../../../../modules/user/domain/userRoles';
+import { VendorModel } from './VendorModel';
 
 export interface UserModelAttr {
     userId: string
@@ -16,9 +18,9 @@ export interface UserModelAttr {
 interface UserModelCreationAttr extends Optional<UserModelAttr, 'userId'>{}
 
 export class UserModel extends Model<UserModelAttr, UserModelCreationAttr> {
-    static associations: {
-        projects:  Association
-    }
+    // static associations: {
+    //     projects:  Association
+    // }
 }
 
 UserModel.init({
@@ -33,7 +35,8 @@ UserModel.init({
     username: DataTypes.STRING,
     roles: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false
+        allowNull: false,
+        defaultValue: <ValidRoles[]>['Customer']
     },
     email: {
         type: DataTypes.STRING(250),
@@ -51,9 +54,11 @@ UserModel.init({
     lastLogin: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: DataTypes.NOW
     }
 }, {
     sequelize,
     tableName: 'users'
 })
+
+UserModel.hasOne(VendorModel, { as: 'vendor', foreignKey: 'userId' });

@@ -1,0 +1,1 @@
+export type VendorVerificationStatus = 'PENDING' | 'PROCESSING' | 'APPROVED' | 'REJECTED'

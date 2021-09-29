@@ -1,11 +1,17 @@
 import express from 'express'
+import cors from 'cors'
 import dotEnv from 'dotenv'
 
 import { v1Router } from './shared/infra/http/api/v1';
 
-export const app = express();
+const app = express();
 
 dotEnv.config();
+
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 
 app.use('/api/v1', v1Router)
 
@@ -23,3 +29,5 @@ const env = process.env.NODE_ENV
 app.listen(PORT, () => {
     console.log(`Server Running on port ${PORT} in ${env}`)
 });
+
+export { app }

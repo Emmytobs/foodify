@@ -1,0 +1,1 @@
+export type RestaurantVerificationStatus = 'PENDING' | 'PROCESSING' | 'APPROVED' | 'REJECTED'

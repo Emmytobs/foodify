@@ -1,7 +1,7 @@
 import express, { NextFunction } from 'express';
-import { IAuthService } from '../../../../modules/iam/services/implementation/AuthService';
-import { fetchUserFromUserId } from '../../../../modules/iam/useCases/FetchUserFromUserId';
-import { UserNotFoundError } from '../../../../modules/iam/useCases/FetchUserFromUserId/FetchUserFromUserIdErrors';
+import { IAuthService } from '../../../../modules/user/services/implementation/AuthService';
+import { fetchUserFromUserId } from '../../../../modules/user/useCases/FetchUserFromUserId';
+import { UserNotFoundError } from '../../../../modules/user/useCases/FetchUserFromUserId/FetchUserFromUserIdErrors';
 import { AppError } from '../../../core/AppError';
 
 export class AuthMiddleware {

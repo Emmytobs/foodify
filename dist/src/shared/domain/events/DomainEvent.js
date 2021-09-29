@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DomainEvent = void 0;
-var DomainEvent = /** @class */ (function () {
-    function DomainEvent() {
-    }
+class DomainEvent {
     /**
    * @method markAggregateForDispatch
    * @static
@@ -11,62 +9,58 @@ var DomainEvent = /** @class */ (function () {
    * events to eventually be dispatched when the infrastructure commits
    * the unit of work.
    */
-    DomainEvent.markAggregateForDispatch = function (aggregate) {
-        var aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
+    static markAggregateForDispatch(aggregate) {
+        const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
         if (!aggregateFound) {
             this.markedAggregates.push(aggregate);
         }
-    };
-    DomainEvent.dispatchAggregateEvents = function (aggregate) {
-        var _this = this;
-        aggregate.domainEvents.forEach(function (event) { return _this.dispatch(event); });
-    };
-    DomainEvent.removeAggregateFromMarkedDispatchList = function (aggregate) {
-        var index = this.markedAggregates.findIndex(function (a) { return a.equals(aggregate); });
+    }
+    static dispatchAggregateEvents(aggregate) {
+        aggregate.domainEvents.forEach((event) => this.dispatch(event));
+    }
+    static removeAggregateFromMarkedDispatchList(aggregate) {
+        const index = this.markedAggregates.findIndex((a) => a.equals(aggregate));
         this.markedAggregates.splice(index, 1);
-    };
-    DomainEvent.findMarkedAggregateByID = function (id) {
-        var found = null;
-        for (var _i = 0, _a = this.markedAggregates; _i < _a.length; _i++) {
-            var aggregate = _a[_i];
+    }
+    static findMarkedAggregateByID(id) {
+        let found = null;
+        for (let aggregate of this.markedAggregates) {
             if (aggregate.id.equals(id)) {
                 found = aggregate;
             }
         }
         return found;
-    };
-    DomainEvent.dispatchEventsForAggregate = function (id) {
-        var aggregate = this.findMarkedAggregateByID(id);
+    }
+    static dispatchEventsForAggregate(id) {
+        const aggregate = this.findMarkedAggregateByID(id);
         if (aggregate) {
             this.dispatchAggregateEvents(aggregate);
             aggregate.clearEvents();
             this.removeAggregateFromMarkedDispatchList(aggregate);
         }
-    };
-    DomainEvent.register = function (callback, eventClassName) {
+    }
+    static register(callback, eventClassName) {
         if (!this.handlersMap.hasOwnProperty(eventClassName)) {
             this.handlersMap[eventClassName] = [];
         }
         this.handlersMap[eventClassName].push(callback);
-    };
-    DomainEvent.clearHandlers = function () {
+    }
+    static clearHandlers() {
         this.handlersMap = {};
-    };
-    DomainEvent.clearMarkedAggregates = function () {
+    }
+    static clearMarkedAggregates() {
         this.markedAggregates = [];
-    };
-    DomainEvent.dispatch = function (event) {
-        var eventClassName = event.constructor.name;
+    }
+    static dispatch(event) {
+        const eventClassName = event.constructor.name;
         if (this.handlersMap.hasOwnProperty(eventClassName)) {
-            var handlers = this.handlersMap[eventClassName];
-            for (var _i = 0, handlers_1 = handlers; _i < handlers_1.length; _i++) {
-                var handler = handlers_1[_i];
+            const handlers = this.handlersMap[eventClassName];
+            for (let handler of handlers) {
                 handler(event);
             }
         }
-    };
-    DomainEvent.handlersMap = {};
-    DomainEvent.markedAggregates = [];
-    return DomainEvent;
-}());
+    }
+}
 exports.DomainEvent = DomainEvent;
+DomainEvent.handlersMap = {};
+DomainEvent.markedAggregates = [];

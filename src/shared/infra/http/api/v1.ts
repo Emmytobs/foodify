@@ -1,6 +1,7 @@
-// @ts-nocheck
 import express from 'express';
-import { iamRoutes } from '../../../../modules/iam/infra/http/routes/iam.route';
+import { userRouter } from '../../../../modules/user/infra/http/routes/userRoutes';
+import { restaurantRouter } from '../../../../modules/restaurant/infra/http/routes/restaurantRoutes';
+import { vendorRoutes } from '../../../../modules/user/infra/http/routes/vendorRoutes';
 
 const v1Router = express.Router();
 
@@ -14,6 +15,9 @@ v1Router.get('/', (req, res) => {
     })
 })
 
-v1Router.use('/user', iamRoutes)
+v1Router.use('/users', userRouter)
+v1Router.use('/vendors', vendorRoutes)
+
+v1Router.use('/restaurants', restaurantRouter)
 
 export { v1Router };

@@ -1,10 +1,9 @@
 // Server
 import './app'
 
-// Database Hooks
+// Database
+import './shared/infra/database/sequelize'
 
-
-// Database Connection
-import './shared/infra/database/sequelize/models'
 
 // Subscriptions
+import './modules/user/subscriptions'

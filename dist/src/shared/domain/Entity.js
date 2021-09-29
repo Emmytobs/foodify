@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Entity = void 0;
-var UniqueEntityID_1 = __importDefault(require("./UniqueEntityID"));
-var isEntity = function (v) {
+const UniqueEntityID_1 = __importDefault(require("./UniqueEntityID"));
+const isEntity = (v) => {
     return v instanceof Entity;
 };
-var Entity = /** @class */ (function () {
-    function Entity(props, id) {
+class Entity {
+    constructor(props, id) {
         this.props = props;
         this._id = id ? id : new UniqueEntityID_1.default();
     }
-    Entity.prototype.equals = function (object) {
+    equals(object) {
         if (object === null || object === undefined) {
             return false;
         }
@@ -24,7 +24,6 @@ var Entity = /** @class */ (function () {
             return false;
         }
         return this._id.equals(object._id);
-    };
-    return Entity;
-}());
+    }
+}
 exports.Entity = Entity;
