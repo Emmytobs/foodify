@@ -10,7 +10,7 @@ import * as CreateVendorErrors from "./CreateVendorErrors";
 
 
 type CreateVendorResponse = Either<
-    Result<void>,
+    Result<string>,
     | AppError.InputError
     | AppError.UnexpectedError
     | Result<any>
@@ -52,7 +52,7 @@ export class CreateVendor implements UseCase<CreateVendorDTO, CreateVendorRespon
             const vendor = vendorOrError.getValue();
             await this.vendorRepo.save(vendor);
 
-            return right(Result.ok<void>());
+            return right(Result.ok("Vendor created successfully"));
         } catch (error) {
             return left(new AppError.UnexpectedError())
         }

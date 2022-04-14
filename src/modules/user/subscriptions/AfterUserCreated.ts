@@ -17,6 +17,8 @@ export class AfterUserCreated implements IHandle {
         console.log('Running UserCreated Event Handler....')
         console.log('User with details was created successfully:')
         console.log(event.user)
+        console.log("\n Sending welcome email to user.... \n")
+        console.log("Email sent!")
         // Do stuff here when a user is created
     }
 }

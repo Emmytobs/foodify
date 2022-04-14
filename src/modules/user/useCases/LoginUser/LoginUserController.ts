@@ -1,4 +1,3 @@
-// @ts-nocheck
 import express from 'express';
 import { AppError } from '../../../../shared/core/AppError';
 import BaseController from "../../../../shared/infra/http/models/BaseController";
@@ -29,7 +28,7 @@ export class LoginUserController extends BaseController {
             const error = result.value
             switch(error.constructor) {
                 case LoginUserErrors.UserDoesNotExist:
-                case LoginUserErrors.PasswordDoesntMatch:
+                case LoginUserErrors.PasswordOrEmailInvalid:
                     return this.notFound(res, undefined, error.errorValue().message);
                 case LoginUserErrors.PasswordOrEmailInvalid:
                 case AppError.InputError:

@@ -10,8 +10,7 @@ import { IAuthService } from "../../services/implementation/AuthService";
 import { LoginUserDTO } from "./LoginUserDTO";
 import { 
     UserDoesNotExist,
-    PasswordOrEmailInvalid,
-    PasswordDoesntMatch
+    PasswordOrEmailInvalid
 } from "./LoginUserErrors";
 
 type LoginUserResult = Either<
@@ -40,6 +39,8 @@ export class LoginUser implements UseCase<LoginUserDTO, LoginUserResult> {
             }
             //#endregion
             
+            // When user is created, the email is converted to lowercase. When user logs in, convert the email to lowercase so the user can access account.
+            dto.email = dto.email.toLowerCase()
             //#region - Run validation on the email and password
             const emailOrError = UserEmail.create({ value: dto.email });
             const passwordOrError = UserPassword.create({ value: dto.password, hashed: false });
@@ -58,9 +59,9 @@ export class LoginUser implements UseCase<LoginUserDTO, LoginUserResult> {
             //#endregion
 
             //#region - Compare passwords
-            const passwordsMatch = user.password.comparePassword(dto.password, user.password.value);
+            const passwordsMatch = await user.password.comparePassword(dto.password, user.password.value);
             if (!passwordsMatch) {
-                return left(new PasswordDoesntMatch());
+                return left(new PasswordOrEmailInvalid());
             }
             //#endregion
 

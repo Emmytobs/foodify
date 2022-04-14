@@ -20,6 +20,14 @@ export class SequelizeVendorRepo implements IVendorRepo {
         return !!vendor;
     }
 
+    async getVendorByUserId(userId: string): Promise<Vendor | null> {
+        const rawVendor = await this.models.VendorModel.findOne({
+            where: { userId }
+        })
+        if (!rawVendor) return null
+        return VendorMap.toDomain(rawVendor)
+    }
+
     async save(vendor: Vendor): Promise<void> {
         const rawVendor = VendorMap.toPersistence(vendor)
         const vendorExists = await this.exists(rawVendor.vendorId);

@@ -15,12 +15,12 @@ interface RestaurantProps {
     name: string
     address: string,
     city: string
-    food: Food
-    rating?: RestaurantRating
     isActive: boolean
+    isVerified: boolean
+    food?: Food
+    rating?: RestaurantRating
     hasFoodListings?: boolean
     // verificationStatus: RestaurantVerificationStatus
-    // isVerified: boolean
 }
 
 export class Restaurant extends AggregateRoot<RestaurantProps> {
@@ -39,8 +39,8 @@ export class Restaurant extends AggregateRoot<RestaurantProps> {
     get food(): Food { return this.props.food }
     get rating(): RestaurantRating | null { return this.props.rating || null }
     get isActive(): boolean { return this.props.isActive }
+    get isVerified(): boolean { return this.props.isVerified }
     // get verificationStatus(): RestaurantVerificationStatus { return this.props.verificationStatus }
-    // get isVerified(): boolean { return this.props.isVerified }
 
     
     private constructor(props: RestaurantProps, id?: UniqueEntityID) {

@@ -16,11 +16,3 @@ export class PasswordOrEmailInvalid extends Result<UseCaseError> {
         } as UseCaseError)
     }
 }
-
-export class PasswordDoesntMatch extends Result<UseCaseError> {
-    constructor() {
-        super(false, {
-            message: 'Email or password is invalid'
-        } as UseCaseError)
-    }
-}

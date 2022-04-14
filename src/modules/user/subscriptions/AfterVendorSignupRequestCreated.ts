@@ -15,5 +15,6 @@ export class AfterVendorSignupRequestCreated implements IHandle {
     onVendorSignupRequestCreated(event: VendorSignupRequestCreated) {
         const { vendorSignupRequest } = event;
         // 1. Send email to the vendor acknoledging the sign up request
+        // 2. Tell the vendor the length of the verification process, and other relevant information
     }
 }

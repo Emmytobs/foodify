@@ -13,7 +13,7 @@ abstract class BaseController {
     }
     abstract executeImpl(req: Request, res: Response): Promise<any> | any
 
-    jsonResponse(
+    private jsonResponse(
         res: Response,
         status: number,
         data?: ResponseShape

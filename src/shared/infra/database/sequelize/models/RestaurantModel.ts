@@ -9,10 +9,11 @@ export interface RestaurantAttr {
     name: string
     address: string
     city: string
-    rating: number
+    rating?: number
     verificationStatus: string
     isActive: boolean
     isVerified: boolean
+    hasFoodListings: boolean
 }
 
 interface RestaurantCreationAttr extends Optional<RestaurantAttr, 'restaurantId'> {}
@@ -64,7 +65,12 @@ RestaurantModel.init(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: false
-        }
+        },
+        hasFoodListings: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
+        },
     },
     {
         sequelize,

@@ -79,6 +79,7 @@ module.exports = {
     }
 
     const createRestaurant = () => {
+
       return queryInterface.createTable('restaurants', {
         restaurantId: {
           type: Sequelize.DataTypes.UUID,
@@ -131,6 +132,11 @@ module.exports = {
           allowNull: false
         },
         isVerified: {
+          type: Sequelize.DataTypes.BOOLEAN,
+          defaultValue: false,
+          allowNull: false
+        },
+        hasFoodListings: {
           type: Sequelize.DataTypes.BOOLEAN,
           defaultValue: false,
           allowNull: false

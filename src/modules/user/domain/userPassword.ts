@@ -33,7 +33,7 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
     }
 
     public async comparePassword(plainTextPassword: string, savedPassword: string): Promise<boolean> {
-        return this.bcryptCompare(plainTextPassword, savedPassword)
+        return (await this.bcryptCompare(plainTextPassword, savedPassword))
         // if (this.isHashed) {
         //     const hashed = this.props.value
         //     return this.bcryptCompare(plainTextPassword, hashed)
@@ -46,8 +46,9 @@ export class UserPassword extends ValueObject<UserPasswordProps> {
         return !!isOfMinimumLength;
     }
     
-    private bcryptCompare(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
-        return bcrypt.compare(plainTextPassword, hashedPassword)
+    private async bcryptCompare(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+        const compareResult = await bcrypt.compare(plainTextPassword, hashedPassword)
+        return !!compareResult
     }
 
     private async hashPassword(password: string) {
